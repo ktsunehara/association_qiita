@@ -1,0 +1,31 @@
+<h1>タイムラインTweets#index</h1>
+<p>Find me in app/views/tweets/index.html.erb</p>
+
+<% @tweets.each do |tweet| %>
+  <hr>
+  <p><span>投稿した人: </span><%=link_to tweet.user.email, user_path(tweet.user.id) %></p>
+
+  <p><span>ツイート内容: </span><%=link_to tweet.body, tweet_path(tweet.id) %></p>
+  <% if user_signed_in? %>
+    <% if @user_iine_ids.include?(tweet.id) %>
+        <p>いいね数:<%= link_to tweet.iines.count,tweet_iines_path(tweet), method: :delete %>
+    <% else %>
+        <p>いいね数:<%= link_to tweet.iines.count,tweet_iines_path(tweet), method: :post  %>
+    <% end %>
+
+    <% if current_user != tweet.user %>
+    <% if tweet.user.followed_by?(current_user) %>
+    <%= link_to "フォロー済み", user_relations_path(tweet.user.id), method: :delete %>
+    <% else %>
+    <%= link_to "フォローする", user_relations_path(tweet.user.id), method: :post %>
+
+    <% end %>
+
+    
+    <% end %> 
+
+  <% else %>
+    <p><span>いいね数: </span><%= tweet.iines.count %></p>
+
+  <% end %>
+<% end %>
